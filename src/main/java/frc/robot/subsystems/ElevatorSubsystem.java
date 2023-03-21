@@ -13,8 +13,9 @@ import frc.robot.Constants;
 
 public class ElevatorSubsystem extends SubsystemBase {
     private CANSparkMax m_elevatorPulley;
+    //init spark 
     private double m_elevatorPulleySpeed = 0;
-
+    //speed at start
     private RelativeEncoder m_elevatorPulleyEncoder;
 
     DigitalInput m_topSwitch;

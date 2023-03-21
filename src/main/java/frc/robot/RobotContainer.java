@@ -46,8 +46,8 @@ public class RobotContainer {
   private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
 
   private final Joystick m_driveController = new Joystick(0);
-  private final Joystick m_operatorController = new Joystick(1);
-  private static double m_drivePowerCap = 0.5;
+  private final Joystick m_operatorController = new Joystick(1); //
+  private static double m_drivePowerCap = 0.5; //like arcade drive
   private static double m_rotatePower = 0;
 
   private final UsbCamera m_driveCamera;

@@ -63,4 +63,8 @@ public final class Constants {
     public static final int CLAW_SOLENOID_REVERSE = 1;
     public static final int RELEASE_SOLENOID_1 = 2;
     public static final int RELEASE_SOLENOID_2 = 3;
+
+    public static class ElevatorPIDConstants {
+        
+    }
 }
