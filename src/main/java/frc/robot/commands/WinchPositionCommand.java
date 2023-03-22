@@ -21,13 +21,16 @@ public class WinchPositionCommand extends CommandBase {
         }
         m_power = power;
 
-        addRequirements(winchSubsystem);
+        addRequirements(winchSubsystem); // it needs it!
     }
 
     @Override
     public void initialize() {
         m_startAngle = m_winchSubsystem.getWinchAbsPosition();
-        m_winchSubsystem.rotate(Math.copySign(m_power, (m_targetAngle - m_startAngle)));
+        double error = m_targetAngle - m_startAngle;
+
+        double output = WinchSubsystem.winchPIDController.calculate(error);
+        m_winchSubsystem.rotate(Math.copySign(output, (m_targetAngle - m_startAngle)));
     }
 
     @Override

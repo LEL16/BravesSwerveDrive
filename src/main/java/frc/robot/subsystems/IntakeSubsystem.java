@@ -39,7 +39,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void close() {
-        m_intake.set(0.6);
+        m_intake.set(0.6); //intake close speed
         m_claw.set(Value.kForward);
         m_release1.set(false);
         m_release2.set(false);
@@ -49,7 +49,7 @@ public class IntakeSubsystem extends SubsystemBase {
         m_intake.set(0);
         m_release1.set(true);
         m_release2.set(true);
-        Timer.delay(0.75);
+        Timer.delay(0.5); // make this lower
         m_claw.set(Value.kReverse);
         Timer.delay(0.2);
         m_release1.set(false);

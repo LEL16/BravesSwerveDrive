@@ -10,12 +10,16 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import edu.wpi.first.math.controller.PIDController;
 
 public class WinchSubsystem extends SubsystemBase {
     private CANSparkMax m_winch;
     private double m_winchSpeed = 0;
 
     private DutyCycleEncoder m_winchEncoder;
+
+    public static PIDController winchPIDController;
+
 
     DigitalInput m_topSwitch;
     DigitalInput m_bottomSwitch;
@@ -29,6 +33,9 @@ public class WinchSubsystem extends SubsystemBase {
 
         m_topSwitch = new DigitalInput(Constants.WINCH_SWITCH_TOP);
         m_bottomSwitch = new DigitalInput(Constants.WINCH_SWITCH_BOTTOM);
+        
+        winchPIDController = new PIDController(0.1, 0, 0);
+        winchPIDController.setTolerance(0.5);
     }
 
     public void rotate(double winchSpeed) {
@@ -38,6 +45,7 @@ public class WinchSubsystem extends SubsystemBase {
     public double getWinchAbsPosition() {
         return 90 - m_winchEncoder.getDistance();
     }
+
 
     // Only resets when a match starts
     public void resetEncoders() {
