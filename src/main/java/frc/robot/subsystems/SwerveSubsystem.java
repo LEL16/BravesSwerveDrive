@@ -55,7 +55,7 @@ public class SwerveSubsystem extends SubsystemBase {
         frontRight.setDesiredState(desiredStates[1]);
         backLeft.setDesiredState(desiredStates[2]);
         backRight.setDesiredState(desiredStates[3]);
-        
+
     }
 
     private AHRS gyro = new AHRS(SPI.Port.kMXP);
@@ -75,15 +75,12 @@ public class SwerveSubsystem extends SubsystemBase {
     // Constructor
     public SwerveSubsystem() {
         new Thread(() -> {
-        try {
-            Thread.sleep(1000);
-            zeroHeading();
-        } catch (Exception e) {
-        } // NavX recalibrating
+            try {
+                Thread.sleep(1000);
+                zeroHeading();
+            } catch (Exception e) {
+            } // NavX recalibrating
         }).start();
     }
-
-
-
 
 }
