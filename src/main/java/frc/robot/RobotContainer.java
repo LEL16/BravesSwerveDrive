@@ -14,6 +14,7 @@ import frc.robot.Commands.Default.DefaultElevatorCommand;
 import frc.robot.Commands.Drivetrain.BrakeCommand;
 import frc.robot.Commands.Drivetrain.IdleDriveCommand;
 import frc.robot.Commands.Drivetrain.PositionDriveCommand;
+import frc.robot.Commands.Drivetrain.AutoCommands.AutoBalance;
 import frc.robot.Commands.Elevator.ElevatorPositionCommand;
 import frc.robot.Commands.Intake.CloseIntakeCommand;
 import frc.robot.Commands.Intake.OpenIntakeCommand;
@@ -167,6 +168,10 @@ public class RobotContainer {
     m_rotationalLimelightTracking.whileActiveContinuous(
         new LimelightAlignmentDriveCommand(m_drivetrainSubsystem, m_limelightSubsystem, "rotational", 0.85));
     m_rotationalLimelightTracking.whenReleased(() -> m_drivetrainSubsystem.getCurrentCommand().cancel());
+
+    Button m_autoBalance = new Button(() -> m_operatorController.getRawButton(5));
+    m_autoBalance.whileActiveContinuous(new AutoBalance(m_drivetrainSubsystem));
+    m_autoBalance.whenReleased(() -> m_drivetrainSubsystem.getCurrentCommand().cancel());
 
   }
 

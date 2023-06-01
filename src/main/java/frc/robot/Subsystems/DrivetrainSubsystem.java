@@ -167,6 +167,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
     };
   }
 
+  public double getRoll() {
+    return m_navx.getRoll();
+  }
+
+  public double getPitch() {
+    return m_navx.getPitch();
+  }
+
   /** Displays the periodically updated robot poses on the Shuffleboard */
   public void updateShuffleboard() {
     m_frontLeftDriveSpeedEntry.setDouble(m_frontLeft.getState().speedMetersPerSecond);
