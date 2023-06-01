@@ -10,7 +10,7 @@ public class AutoBalance extends CommandBase {
     
     private final PIDController m_rollPIDController;
     private final PIDController m_pitchPIDController;
-    private static final double m_kP = 0.05;
+    private static final double m_kP = 0.005;
     private static final double m_kI = 0.0;
     private static final double m_kD = 0.0;
     private static final double m_degreesTolerance = 1.0;
