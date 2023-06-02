@@ -13,7 +13,7 @@ public class AutoBalance extends CommandBase {
     private static final double m_kP = 0.005;
     private static final double m_kI = 0.0;
     private static final double m_kD = 0.0;
-    private static final double m_degreesTolerance = 1.0;
+    private static final double m_degreesTolerance = 3.0;
 
     private double m_yVelocity;
     private double m_xVelocity;
