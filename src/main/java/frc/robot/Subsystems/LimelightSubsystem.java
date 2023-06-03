@@ -56,29 +56,7 @@ public class LimelightSubsystem extends SubsystemBase {
 
     /** The LimelightSubsystem constructor. Initializes the Limelight subsystem and sets up the NetworkTable. */
     public LimelightSubsystem() {
-        networkTable = NetworkTableInstance.getDefault().getTable("limelight");
-
-        limelightTab = Shuffleboard.getTab("Limelight");
-        ShuffleboardLayout limelightLayout = limelightTab.getLayout("Limelight Subsystem Specifications", BuiltInLayouts.kList).withSize(2, 3).withPosition(3, 0);
-
-        ledStatusEntry = limelightTab.add("Set LED Status", this.isLedOn).withWidget(BuiltInWidgets.kToggleButton).getEntry();
-        cameraStatusEntry = limelightTab.add("Set Camera Status", this.isCameraModeOn).withWidget(BuiltInWidgets.kToggleButton).getEntry();
-        pipelineIdEntry = limelightTab.add("Set Pipeline", Constants.PIPELINE_ID).withWidget(BuiltInWidgets.kNumberSlider).getEntry();
-
-        limelightTab.addNumber("Y Resolution", () -> Constants.LIMELIGHT_VERTICAL_RESOLUTION);
-        limelightTab.addNumber("X Resolution", () -> Constants.LIMELIGHT_HORIZONTAL_RESOLUTION);
-        limelightTab.addNumber("Limelight Lens Height", () -> Constants.LIMELIGHT_LENS_HEIGHT);
-        limelightTab.addNumber("Limelight Angle", () -> Constants.LIMELIGHT_ANGLE);
-        limelightTab.addNumber("Goal Height", () -> Constants.LIMELIGHT_GOAL_HEIGHT);
-
-        limelightLayout.addNumber("Y Target Angle", () -> getYTargetAngle());
-        limelightLayout.addNumber("X Target Angle", () -> getXTargetAngle());
-        limelightLayout.addNumber("Target Area Distance", () -> getTargetAreaDistance());
-        limelightLayout.addNumber("Trigonometric Distance", () -> getTrigDistance());
-        limelightLayout.addNumber("Preferred Distance", () -> getDistance());
-        limelightLayout.addBoolean("Tag Found", () -> getFoundTag());
-        limelightLayout.addBoolean("LED Status", () -> getLEDStatus());
-        limelightLayout.addBoolean("Camera Status", () -> getCameraModeStatus());
+        networkTable = NetworkTableInstance.getDefault().getTable("limelight");    
     }
 
     @Override

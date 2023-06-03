@@ -18,6 +18,7 @@ import frc.robot.Commands.Drivetrain.AutoCommands.AutoBalance;
 import frc.robot.Commands.Elevator.ElevatorPositionCommand;
 import frc.robot.Commands.Intake.CloseIntakeCommand;
 import frc.robot.Commands.Intake.OpenIntakeCommand;
+import frc.robot.Commands.Limelight.ElevatorTargetTrackingWithLimelight;
 import frc.robot.Commands.Limelight.LimelightAlignmentDriveCommand;
 import frc.robot.Commands.Winch.WinchPositionCommand;
 import frc.robot.Subsystems.DrivetrainSubsystem;
@@ -32,7 +33,7 @@ public class RobotContainer {
   private final LimelightSubsystem m_limelightSubsystem = new LimelightSubsystem();
   private final ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
   private final WinchSubsystem m_winchSubsystem = new WinchSubsystem();
-  private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
+  //private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
 
   private final Joystick m_driveController = new Joystick(0);
   private final Joystick m_operatorController = new Joystick(1);
@@ -93,7 +94,7 @@ public class RobotContainer {
     m_cancelPresets.whenPressed(() -> cancelElevatorCommands());
 
     Button m_resetElevator = new Button(
-        () -> m_operatorController.getRawButton(7) && m_operatorController.getRawButton(8));
+        () -> m_operatorController.getRawButton(7));
     m_resetElevator.whenPressed(() -> reset());
 
     Button m_reverseWinch = new Button(() -> m_operatorController.getRawButton(6));
@@ -119,13 +120,13 @@ public class RobotContainer {
     Button m_drivePosition = new Button(() -> m_operatorController.getRawButton(2));
     m_drivePosition.whenPressed(new ParallelCommandGroup(new ElevatorPositionCommand(m_elevatorSubsystem, "LOW", 0.8),
         new WinchPositionCommand(m_winchSubsystem, "DRIVE", 0.8)));
-
+/* 
     Button m_openClaw = new Button(() -> m_operatorController.getRawAxis(2) > 0.5);
     m_openClaw.whenPressed(new OpenIntakeCommand(m_intakeSubsystem));
 
     Button m_closeClaw = new Button(() -> m_operatorController.getRawAxis(3) > 0.5);
     m_closeClaw.whenPressed(new CloseIntakeCommand(m_intakeSubsystem));
-
+*/
     Button m_rotateLeft = new Button(() -> m_driveController.getRawButton(11));
     m_rotateLeft.whileHeld(() -> setRotatePower("left"));
     m_rotateLeft.whenReleased(() -> setRotatePower("none"));
@@ -161,17 +162,21 @@ public class RobotContainer {
 
     Button m_translationalLimelightTracking = new Button(() -> m_driveController.getRawButton(2));
     m_translationalLimelightTracking.whileActiveContinuous(
-        new LimelightAlignmentDriveCommand(m_drivetrainSubsystem, m_limelightSubsystem, "translational", 0.85));
+        new LimelightAlignmentDriveCommand(m_drivetrainSubsystem, m_limelightSubsystem, "translational"));
     m_translationalLimelightTracking.whenReleased(() -> m_drivetrainSubsystem.getCurrentCommand().cancel());
 
     Button m_rotationalLimelightTracking = new Button(() -> m_driveController.getRawButton(4));
     m_rotationalLimelightTracking.whileActiveContinuous(
-        new LimelightAlignmentDriveCommand(m_drivetrainSubsystem, m_limelightSubsystem, "rotational", 0.85));
+        new LimelightAlignmentDriveCommand(m_drivetrainSubsystem, m_limelightSubsystem, "rotational"));
     m_rotationalLimelightTracking.whenReleased(() -> m_drivetrainSubsystem.getCurrentCommand().cancel());
 
     Button m_autoBalance = new Button(() -> m_operatorController.getRawButton(5));
     m_autoBalance.whileActiveContinuous(new AutoBalance(m_drivetrainSubsystem));
     m_autoBalance.whenReleased(() -> m_drivetrainSubsystem.getCurrentCommand().cancel());
+
+    Button m_elevatorLimelightTracking = new Button(() -> m_driveController.getRawButton(5));
+      m_elevatorLimelightTracking.whileActiveContinuous(new ElevatorTargetTrackingWithLimelight(m_winchSubsystem, m_elevatorSubsystem, m_limelightSubsystem, true, false));
+      m_elevatorLimelightTracking.whenReleased(() -> m_drivetrainSubsystem.getCurrentCommand().cancel());
 
   }
 
