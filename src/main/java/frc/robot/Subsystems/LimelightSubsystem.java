@@ -5,13 +5,10 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import java.util.Map;
 
 /** Represents a Limelight sensor */
 public class LimelightSubsystem extends SubsystemBase {
@@ -29,11 +26,6 @@ public class LimelightSubsystem extends SubsystemBase {
 
     // Shuffleboard tab specifically for the Limelight.
     private ShuffleboardTab limelightTab;
-
-    // Shuffleboard data that can be manipulated.
-    private GenericEntry ledStatusEntry;
-    private GenericEntry cameraStatusEntry;
-    private GenericEntry pipelineIdEntry;
 
     // Variables to store the current state of the Limelight.
     private boolean isCameraModeOn = false;
@@ -54,10 +46,19 @@ public class LimelightSubsystem extends SubsystemBase {
     private double trigDistance;
     private double distance;
 
+    private GenericEntry pipelineSliderEntry;
+    private GenericEntry LEDsEntry;
+    private GenericEntry cameraEntry;
+
     /** The LimelightSubsystem constructor. Initializes the Limelight subsystem and sets up the NetworkTable. */
     public LimelightSubsystem() {
-        networkTable = NetworkTableInstance.getDefault().getTable("limelight");    
-    }
+        networkTable = NetworkTableInstance.getDefault().getTable("limelight");  
+        limelightTab = Shuffleboard.getTab("Limelight");
+        pipelineSliderEntry = limelightTab.add("Pipeline", 0).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 4)).withSize(2, 1).withPosition(0, 0).getEntry();
+        LEDsEntry = limelightTab.add("LEDs", false).withWidget(BuiltInWidgets.kToggleSwitch).withPosition(0,1).withSize(2,1).getEntry();
+        cameraEntry = limelightTab.add("Camera", false).withWidget(BuiltInWidgets.kToggleSwitch).withPosition(0,2).withSize(2,1).getEntry();
+
+    }   
 
     @Override
     public void periodic() {
@@ -72,13 +73,13 @@ public class LimelightSubsystem extends SubsystemBase {
 
         // Using the entries to generate data and/or change current Limelight
         // specifications.
-        pipelineEntry.setNumber(Constants.PIPELINE_ID);
-        if (isCameraModeOn) {
+        pipelineEntry.setNumber(pipelineSliderEntry.getDouble(0));
+        if (cameraEntry.getBoolean(true)) {
             camModeEntry.setNumber(1);
         } else {
             camModeEntry.setNumber(0);
         }
-        if (isLedOn) {
+        if (LEDsEntry.getBoolean(true)) {
             ledModeEntry.setNumber(3);
         } else {
             ledModeEntry.setNumber(1);
