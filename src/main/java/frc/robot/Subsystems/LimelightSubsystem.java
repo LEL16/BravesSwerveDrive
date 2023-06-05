@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import java.util.Map;
+import java.util.AbstractMap.SimpleEntry;
 
 /** Represents a Limelight sensor */
 public class LimelightSubsystem extends SubsystemBase {
@@ -49,7 +50,12 @@ public class LimelightSubsystem extends SubsystemBase {
     private GenericEntry pipelineSliderEntry;
     private GenericEntry LEDsEntry;
     private GenericEntry cameraEntry;
-
+    private GenericEntry txEntry;
+    private GenericEntry tyEntry;
+    private GenericEntry tvEntry;
+    private GenericEntry taEntry;
+    private GenericEntry areaDistanceEntry;
+    private GenericEntry trigDistanceEntry;
     /** The LimelightSubsystem constructor. Initializes the Limelight subsystem and sets up the NetworkTable. */
     public LimelightSubsystem() {
         networkTable = NetworkTableInstance.getDefault().getTable("limelight");  
@@ -57,6 +63,12 @@ public class LimelightSubsystem extends SubsystemBase {
         pipelineSliderEntry = limelightTab.add("Pipeline", 0).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 4)).withSize(2, 1).withPosition(0, 0).getEntry();
         LEDsEntry = limelightTab.add("LEDs", false).withWidget(BuiltInWidgets.kToggleSwitch).withPosition(0,1).withSize(2,1).getEntry();
         cameraEntry = limelightTab.add("Camera", false).withWidget(BuiltInWidgets.kToggleSwitch).withPosition(0,2).withSize(2,1).getEntry();
+        txEntry = limelightTab.add("tx",-1).withSize(1, 1).withPosition(2, 0).getEntry();
+        tyEntry = limelightTab.add("ty",-1).withSize(1, 1).withPosition(2, 1).getEntry();
+        tvEntry = limelightTab.add("tv",false).withSize(1, 1).withPosition(2, 4).getEntry();
+        taEntry = limelightTab.add("ta",-1).withSize(1, 1).withPosition(2, 3).getEntry();
+        areaDistanceEntry = limelightTab.add("area distance",-1).withSize(1, 1).withPosition(3, 0).getEntry();
+        trigDistanceEntry = limelightTab.add("trig distance",-1).withSize(1, 1).withPosition(3, 1).getEntry();
 
     }   
 
@@ -66,11 +78,17 @@ public class LimelightSubsystem extends SubsystemBase {
         pipelineEntry = networkTable.getEntry("pipeline");
         camModeEntry = networkTable.getEntry("camMode");
         ledModeEntry = networkTable.getEntry("ledMode");
-        yEntry = networkTable.getEntry("tx");
+        yEntry = networkTable.getEntry("ty");
         targetAreaEntry = networkTable.getEntry("ta");
-        xEntry = networkTable.getEntry("ty");
+        xEntry = networkTable.getEntry("tx");
         foundTagEntry = networkTable.getEntry("tv");
-
+        //Updating Generic Entries
+        txEntry.setDouble(xEntry.getDouble(-1));
+        tyEntry.setBoolean(foundTagBool);
+        tvEntry.setDouble(tvEntry.getDouble(-1));
+        taEntry.setDouble(targetAreaEntry.getDouble(-1));
+        areaDistanceEntry.setDouble(targetAreaDistance);
+        trigDistanceEntry.setDouble(trigDistance);
         // Using the entries to generate data and/or change current Limelight
         // specifications.
         pipelineEntry.setNumber(pipelineSliderEntry.getDouble(0));
