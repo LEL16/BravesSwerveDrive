@@ -25,16 +25,18 @@ public class LimelightAlignmentDriveCommand extends CommandBase {
     /**
      * @param drivetrainSubsystem The robot's drivetrain subsystem
      * @param limelightSubsystem  The robot's Limelight subsystem
-     * @param distanceToRobot    The desired distance to maintain from the player
-     * @param yControlMode        The type of correctional movement in the y direction: "translational" or "rotational"
+     * @param distanceToRobot     The desired distance to maintain from the player
+     * @param yControlMode        The type of correctional movement in the y
+     *                            direction: "translational" or "rotational"
      */
-    public LimelightAlignmentDriveCommand(DrivetrainSubsystem drivetrainSubsystem, LimelightSubsystem limelightSubsystem, String yControlMode) {
+    public LimelightAlignmentDriveCommand(DrivetrainSubsystem drivetrainSubsystem,
+            LimelightSubsystem limelightSubsystem, String yControlMode) {
         m_drivetrainSubsystem = drivetrainSubsystem;
         m_limelightSubsystem = limelightSubsystem;
 
-        m_distanceToRobot = 0.85;
+        m_distanceToRobot = 1;
         m_isFinishedTolerance = 0.05;
-        m_kP = 0.05;
+        m_kP = 0.01;
         m_deadband = 0.005;
         m_yControlMode = yControlMode;
 
@@ -48,27 +50,39 @@ public class LimelightAlignmentDriveCommand extends CommandBase {
     }
 
     public void execute() {
-        if (m_yControlMode.equals("translational")) { m_yVelocity = m_yPIDController.calculate(m_limelightSubsystem.getYTargetAngle()); } 
-        else { m_angularVelocity = m_angController.calculate(m_limelightSubsystem.getYTargetAngle()); }
+        if (m_yControlMode.equals("translational")) {
+            m_yVelocity = m_yPIDController.calculate(m_limelightSubsystem.getXTargetAngle());
+        } else {
+            m_angularVelocity = m_angController.calculate(m_limelightSubsystem.getXTargetAngle());
+        }
 
         m_xVelocity = -m_xPIDController.calculate((m_limelightSubsystem.getDistance() - m_distanceToRobot) * 100);
 
         m_xVelocity = (Math.abs(m_xVelocity) < m_deadband) ? 0 : m_xVelocity;
         m_yVelocity = (Math.abs(m_yVelocity) < m_deadband) ? 0 : m_yVelocity;
         m_angularVelocity = (Math.abs(m_angularVelocity) < m_deadband * 15) ? 0 : m_angularVelocity;
-
-        m_drivetrainSubsystem.drive(
-                m_xVelocity,
-                m_yVelocity,
-                m_angularVelocity,
-                false);
+        if (m_limelightSubsystem.getFoundTag()) {
+            m_drivetrainSubsystem.drive(
+                    m_xVelocity,
+                    m_yVelocity,
+                    m_angularVelocity*1.3,
+                    false);
+        }
+        else {
+            m_drivetrainSubsystem.drive(0, 0, 0, true);
+        }
     }
 
     public boolean isFinished() {
-        if (Math.abs(m_limelightSubsystem.getYTargetAngle()) > m_isFinishedTolerance || (Math.abs(m_limelightSubsystem.getDistance() - m_distanceToRobot) > m_isFinishedTolerance / 5)) { return false; }
+        if (Math.abs(m_limelightSubsystem.getXTargetAngle()) > m_isFinishedTolerance
+                || (Math.abs(m_limelightSubsystem.getDistance() - m_distanceToRobot) > 0.5 / 5)) {
+            return false;
+        }
         return true;
     }
 
     @Override
-    public void end(boolean interrupted) { m_drivetrainSubsystem.drive(0, 0, 0, true); }
+    public void end(boolean interrupted) {
+        m_drivetrainSubsystem.drive(0, 0, 0, true);
+    }
 }

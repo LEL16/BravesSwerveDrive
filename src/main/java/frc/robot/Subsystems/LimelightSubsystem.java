@@ -96,7 +96,7 @@ public class LimelightSubsystem extends SubsystemBase {
         */
         // Using the entries to generate data and/or change current Limelight
         // specifications.
-        pipelineEntry.setNumber(1);
+        pipelineEntry.setNumber(0);
         // (int)pipelineSliderEntry.getDouble(0)
         if (isCameraModeOn == true) {
             camModeEntry.setNumber(1);
